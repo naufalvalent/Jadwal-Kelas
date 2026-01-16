@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" />
+  <title>7G Universe — Official Website</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #6366f1;
+      --secondary: #a855f7;
+      --instagram: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+      --bg-dark: #020617;
+      --glass: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Reset khusus Mobile */
+    * { 
+      box-sizing: border-box; 
+      margin: 0; padding: 0; 
+      scroll-behavior: smooth;
+      -webkit-tap-highlight-color: transparent; /* Hilangkan kotak biru saat klik di Android/iOS */
+    }
+
+    body { 
+      font-family: 'Plus Jakarta Sans', sans-serif; 
+      background: var(--bg-dark); 
+      color: #f8fafc; 
+      overflow-x: hidden; 
+      line-height: 1.5;
+      /* Support iPhone Notch */
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    /* NAVBAR MOBILE */
+    .nav {
+      position: fixed;
+      top: 0; width: 100%; z-index: 1000;
+      background: rgba(2, 6, 23, 0.85);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px); /* Support Safari iOS */
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .nav-container { display: flex; justify-content: space-between; align-items: center; height: 65px; padding: 0 20px; }
+    .brand { font-size: 1.2rem; font-weight: 800; color: #fff; text-decoration: none; letter-spacing: -0.5px; }
+
+    /* HAMBURGER MENU */
+    .menu-toggle { display: flex; flex-direction: column; gap: 5px; cursor: pointer; z-index: 3000; padding: 5px; }
+    .menu-toggle span { display: block; width: 22px; height: 2px; background: white; border-radius: 10px; transition: 0.3s; }
+    .menu-toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .menu-toggle.active span:nth-child(2) { opacity: 0; }
+    .menu-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* SIDE MENU (70% Layar HP) */
+    .menu-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); opacity: 0; visibility: hidden; transition: 0.3s; z-index: 1999; }
+    .menu-backdrop.active { opacity: 1; visibility: visible; }
+
+    .side-menu {
+      position: fixed; top: 0; right: -75%; width: 75%; max-width: 300px;
+      height: 100%; background: #0f172a; display: flex; flex-direction: column; 
+      padding: 90px 20px 30px; gap: 10px; transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); 
+      z-index: 2000; border-left: 1px solid var(--glass-border);
+    }
+    .side-menu.open { right: 0; }
+    .side-menu a { font-size: 1rem; font-weight: 600; color: #cbd5e1; text-decoration: none; padding: 12px 15px; border-radius: 10px; }
+    .side-menu a:active { background: rgba(99, 102, 241, 0.15); color: var(--primary); }
+
+    /* HERO SECTION */
+    .hero { position: relative; height: 50vh; min-height: 350px; display: flex; align-items: center; justify-content: center; text-align: center; }
+    .hero-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.4); z-index: -1; }
+    .hero-content h1 { font-size: 2.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 5px; }
+    .hero-content p { font-size: 0.75rem; color: #94a3b8; letter-spacing: 2px; }
+
+    /* CARDS */
+    .container { width: 100%; max-width: 1000px; margin: 20px auto; padding: 0 15px; }
+    .card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
+    .section-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 18px; color: #818cf8; }
+
+    /* JADWAL GRID (Mobile-First) */
+    .day-block { margin-bottom: 20px; border-left: 3px solid var(--primary); padding-left: 12px; }
+    .day-name { font-weight: 800; color: var(--secondary); margin-bottom: 10px; font-size: 0.85rem; text-transform: uppercase; }
+    .lesson-grid { display: grid; gap: 8px; grid-template-columns: 1fr 1fr; } /* 2 kolom di HP */
+    .lesson-box { background: rgba(255,255,255,0.04); padding: 10px; border-radius: 12px; border: 1px solid var(--glass-border); }
+    .subject { font-weight: 700; font-size: 0.85rem; display: block; }
+    .time { font-size: 0.6rem; color: #64748b; }
+
+    /* PIKET & RULES */
+    .piket-item { display: flex; justify-content: space-between; padding: 12px; background: rgba(255,255,255,0.02); border-radius: 10px; margin-bottom: 8px; font-size: 0.85rem; }
+    .rule-item { display: flex; gap: 12px; margin-bottom: 12px; }
+    .rule-num { background: var(--primary); color: white; min-width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-size: 0.7rem; font-weight: 800; }
+    .rule-text { font-size: 0.85rem; color: #cbd5e1; }
+
+    /* INSTAGRAM */
+    .instagram-card { background: rgba(255,255,255,0.04); border-radius: 20px; padding: 25px; text-align: center; border: 1px solid var(--glass-border); margin-bottom: 30px; }
+    .btn-ig { display: inline-block; padding: 10px 20px; background: var(--instagram); color: white; text-decoration: none; border-radius: 50px; font-weight: 700; font-size: 0.8rem; margin-top: 10px; }
+
+    footer { text-align: center; padding: 40px 0; color: #475569; font-size: 0.7rem; border-top: 1px solid var(--glass-border); }
+
+    /* Media query untuk layar lebih lebar (Tablet/Laptop) */
+    @media (min-width: 600px) {
+      .lesson-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+      .hero-content h1 { font-size: 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="#" class="brand">7G UNIVERSE</a>
+      <div class="menu-toggle" id="mobile-menu" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="menu-backdrop" id="backdrop" onclick="toggleMenu()"></div>
+
+  <div class="side-menu" id="side-menu">
+    <a href="#" onclick="toggleMenu()">🏠 Home</a>
+    <a href="#jadwal" onclick="toggleMenu()">📅 Jadwal Pelajaran</a>
+    <a href="#piket" onclick="toggleMenu()">🧹 Jadwal Piket</a>
+    <a href="#rules" onclick="toggleMenu()">📜 Peraturan Kelas</a>
+    <a href="#instagram" onclick="toggleMenu()">📸 Instagram</a>
+  </div>
+
+  <header class="hero">
+    <img src="kelas.jpg.jpeg" class="hero-img" alt="Foto Kelas">
+    <div class="hero-content">
+      <h1>7G-SADOEL</h1>
+      <p>SOLIDARITAS TANPA BATAS</p>
+    </div>
+  </header>
+
+  <main class="container">
+    
+    <section id="jadwal" class="card">
+      <h2 class="section-title">Jadwal Pelajaran</h2>
+      
+      <div class="day-block">
+        <div class="day-name">Senin</div>
+        <div class="lesson-grid">
+          <div class="lesson-box"><span class="time">07:20-08:40</span><span class="subject">B. Inggris</span></div>
+          <div class="lesson-box"><span class="time">08:40-10:50</span><span class="subject">B. Indonesia</span></div>
+          <div class="lesson-box"><span class="time">10:40-13:35</span><span class="subject">IPA</span></div>
+          
+        </div>
+      </div>
+
+      <div class="day-block">
+        <div class="day-name">Selasa</div>
+        <div class="lesson-grid">
+          <div class="lesson-box"><span class="time">07:10-09:10</span><span class="subject">PJOK</span></div>
+          <div class="lesson-box"><span class="time">09:10-11:25</span><span class="subject">Informatika</span></div><div class="lesson-box"><span class="time">07:20-08:40</span><span class="subject">B. Inggris</span></div>
+          <div class="lesson-box"><span class="time">11:25-14:10</span><span class="subject">B. Indonesia</span></div>      
+        </div>
+      </div>
+
+      <div class="day-block">
+        <div class="day-name">Rabu</div>
+        <div class="lesson-grid">
+          <div class="lesson-box"><span class="time">07:10-09:10</span><span class="subject">Matematika</span></div>
+          <div class="lesson-box"><span class="time">09:30-10:10</span><span class="subject">BK</span></div>
+          <div class="lesson-box"><span class="time">10:10-11:25</span><span class="subject">IPS</span></div>
+          <div class="lesson-box"><span class="time">11:25-14:10</span><span class="subject">PAI</span></div>
+        </div>
+      </div>
+
+      <div class="day-block">
+        <div class="day-name">Kamis</div>
+        <div class="lesson-grid">
+          <div class="lesson-box"><span class="time">07:10-09:10</span><span class="subject">PPKN</span></div>
+          <div class="lesson-box"><span class="time">09:30-11:25</span><span class="subject">SBK</span></div>
+          <div class="lesson-box"><span class="time">11:25-13:35</span><span class="subject">IPA</span></div>        
+        </div>
+      </div>
+
+      <div class="day-block">
+        <div class="day-name">Jumat</div>
+        <div class="lesson-grid">
+          <div class="lesson-box"><span class="time">07:45-08:45</span><span class="subject">IPA</span></div>
+          <div class="lesson-box"><span class="time">08:45-10:00</span><span class="subject">B. Inggris</span></div>
+          <div class="lesson-box"><span class="time">10:00-11:00</span><span class="subject">Matematika</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="piket" class="card">
+      <h2 class="section-title">Jadwal Piket</h2>
+      <div class="piket-item"><span>Senin</span><strong>Orak Tau</strong></div>
+      <div class="piket-item"><span>Selasa</span><strong>Orak Tau</strong></div>
+      <div class="piket-item"><span>Rabu</span><strong>Orak Tau</strong></div>
+      <div class="piket-item"><span>Kamis</span><strong>Orak Tau</strong></div>
+      <div class="piket-item"><span>Jumat</span><strong>Orak Tau</strong></div>
+    </section>
+
+    <section id="rules" class="card">
+      <h2 class="section-title">Peraturan</h2>
+      <div class="rule-item">
+        <div class="rule-num">01</div>
+        <div class="rule-text">Wajib bawa Tumbler & Wadah makan (Zero Plastic).</div>
+      </div>
+        <div class="rule-item">
+        <div class="rule-num">02</div>
+        <div class="rule-text">Membawa plastik untuk menampung sampah plastik yang kalian bawa/beli.</div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-num">03</div>
+        <div class="rule-text">Jaga kebersihan kolong meja.</div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-num">04</div>
+        <div class="rule-text">Saling menghormati, No Bullying!</div> 
+      </div>
+        <div class="rule-item">
+        <div class="rule-num">05</div>
+        <div class="rule-text">Saling Respect.</div>
+      </div>
+      </div>
+    </section>
+
+    <section id="instagram" class="instagram-card">
+      <p style="font-weight: 800;">@7g_ togetherforever</p>
+      <a href="https://instagram.com" class="btn-ig">Follow Us</a>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>&copy; By-Gilang-7G-Universe</p>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const toggle = document.getElementById('mobile-menu');
+      const menu = document.getElementById('side-menu');
+      const backdrop = document.getElementById('backdrop');
+      
+      toggle.classList.toggle('active');
+      menu.classList.toggle('open');
+      backdrop.classList.toggle('active');
+
+      // Kunci scroll body saat menu terbuka
+      if(menu.classList.contains('open')) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = 'auto';
+      }
+    }
+  </script>
+
+</body>
+</html>
